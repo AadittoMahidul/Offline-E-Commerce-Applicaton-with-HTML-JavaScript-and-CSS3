@@ -1,0 +1,142 @@
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h1 {
+        background-color: aquamarine;
+        text-align: center;
+        padding: 5px;
+    }
+    .news {
+        width: 360px;
+        border-radius:0px 10px 10px 0px; 
+        display:flex;
+        position: relative;
+        overflow: hidden;
+    }
+    .white
+    {
+        height:40px;
+        overflow:hidden;
+    }
+    
+    .scroll{
+        display: flex;
+        flex-wrap: wrap;
+        margin:0;
+        padding: 0;
+        z-index: 999;
+        animation:vertical-up 5s ease-in-out infinite;
+    }
+    .scroll li
+    {
+        list-style: none;
+        display: flex;
+        width: 100%;
+        line-height: 34px;
+        align-items: center;
+        padding-left: 25px;
+    }
+    .scroll li a {
+        text-decoration: none;
+        color:#323232;
+        font-weight:700;
+        
+    }
+    .scroll a:hover
+     {
+        color:#0d6efd;
+    }
+    
+    .scroll:hover{animation-play-state: paused; }
+    .dot {
+        height: 7px;
+        width: 7px;
+        margin-left: 3px;
+        margin-right: 3px;
+        background-color: rgb(207, 23, 23);
+        border-radius: 50%;
+        display: inline-block;
+    }
+    
+    @keyframes vertical-up 
+    {
+        0%   {margin-top: 0;}
+        35%  {margin-top: -30px;}
+        70%  {margin-top: -60px;}
+        100% {margin-top: 0;}
+        
+    }
+
+    .foot {
+        background-color: green;
+        opacity: 0.3;
+        color: white;
+        bottom: 1.5px;
+        padding-top: 10px;
+        width: 100%;
+        position: fixed;
+    }
+
+    .column {
+        float: left;
+        width: 33.3%;
+        margin-bottom: 16px;
+        padding: 0 8px;
+    }
+
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        margin: 8px;
+    }
+
+    .about-section {
+        padding: 50px;
+        text-align: center;
+        background-color: #474e5d;
+        color: white;
+    }
+
+    .container {
+        padding: 0 16px;
+    }
+
+    .container::after,
+    .row::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    .title {
+        color: grey;
+    }
+
+    .button {
+        border: none;
+        outline: 0;
+        display: inline-block;
+        padding: 8px;
+        color: white;
+        background-color: #000;
+        text-align: center;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .button:hover {
+        background-color: #555;
+    }
+
+    @media screen and (max-width: 650px) {
+        .column {
+            width: 100%;
+            display: block;
+        }
+    }

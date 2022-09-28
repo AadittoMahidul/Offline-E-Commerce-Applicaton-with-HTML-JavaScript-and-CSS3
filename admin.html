@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
+    <title>App: Home</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css" />
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="node_modules/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="scripts/functions.js"></script>
+    <style>
+        body {
+            padding-top: 70px;
+        }
+        .error {
+            color: red;
+            font-size: .75rem;
+        }
+    </style>
+    <script>
+        $(()=> {
+            select("SELECT *  FROM products", [])
+            .then(r=>{
+                for(var i=0;i< r.data.length; i++){
+                    $("#table-product tbody").append(`<tr>
+                                                    <td align='center'><img title=""  class='img-thumbnail' style='width:80px;height:40px' id='p_${r.data.item(i).productid}' /></td>
+                                                        <td>${r.data.item(i).productname}</td>
+                                                        <td>${r.data.item(i).price}</td>
+                                                        <td>${r.data.item(i).description}</td>
+                                                    </tr>`);
+                                                    unit8ArrayToPicture(`p_${r.data.item(i).productid}`, r.data.item(i).picture, r.data.item(i).pictype);
+                }               
+            })
+            .catch(err=>{
+                console.log(err.error || err)
+            })
+            select("SELECT *  FROM orders", [])
+            .then(r=>{
+                for(var i=0; r.data.length; i++){
+                    $("#table-order tbody").append(`<tr>
+                                                        <td>${r.data.item(i).orderdate}</td>
+                                                        <td>${r.data.item(i).customerid}</td>
+                                                        <td>${r.data.item(i).productid}</td>
+                                                        <td>${r.data.item(i).quantity}</td>
+                                                        <td>${r.data.item(i).status}</td>
+                                                    </tr>`);
+                }
+            })
+            .catch(err=>{
+                console.log(err.error)
+            });
+            $("#admin-form").click(()=>{
+                if($("#product-frm").valid()){
+                    let data = [$("#name").val(), $("#price").val(), $("#description").val(), unit8Array, fileType];
+                    exec(`INSERT INTO products (productname,price, description, picture, pictype) VALUES (?,?,?,?,?)`, data)
+                    .then(r=>{
+                        console.log(r);
+                        window.location.reload();
+                    })
+                    .catch(err=>{
+                        console.log(err.error || err);
+                    })
+                }
+                
+
+            });
+            $('#picture').change(() => {
+                fileType = document.getElementById('picture').files[0].type;
+                fileToUnit8Array(document.getElementById('picture').files[0])
+            });
+        });
+        
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light fixed-top shadow-sm" style="background-color: #c3d805;">
+        <div class="container-fluid">
+            <span class="navbar-brand">
+                <img class="bg-success" style="position: absolute; top: 2px; bottom: 2px; border: solid 1px lightgray; border-radius: 50%;" src="Images/add-to-cart.png" alt="" width="50" height="50">
+            </span>
+                <span class="navbar-brand" style="padding-left: 42px; font-size: 1.7rem; text-align: center; color: rgb(255, 20, 20);"><b>GrameenBazar</b><sup>.com</sup></span>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a href="index.html" class="nav-link" style="color: white;">Home</a></li>
+                    <li class="nav-item"><a href="about.html" class="nav-link" style="color: white;">Contact Us</a></li>
+                  
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h3 style="text-align: center; padding: 10px;">Add New Product</h3>
+                <form id="product-frm">
+                    <div class="form-group row mb-1">
+                        <label class="col-form-label col-form-label-sm col-2 text-end">Name</label>
+                        <div class="col-10">
+                            <input type="text" name="name" id="name" class="form-control form-control-sm" required />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label class="col-form-label col-form-label-sm col-2 text-end">Price</label>
+                        <div class="col-10">
+                            <input type="text" name="price" id="price" class="form-control form-control-sm" required />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label class="col-form-label col-form-label-sm col-2 text-end">Description</label>
+                        <div class="col-10">
+                            <input type="text" name="description" id="description" class="form-control form-control-sm" required />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label class="col-form-label col-form-label-sm col-2 text-end">Picture</label>
+                        <div class="col-10">
+                            <input type="file" name="picture" id="picture" class="form-control form-control-sm" required />
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        
+                        <div class="col-10 offset-2 text-end">
+                            <button id="admin-form" type="button" class="btn btn-outline-success">Add Product</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+         </div>
+        <div class="row">
+           <div class="col-12">
+                <h3 style="text-align: center; padding: 10px;">Products Table</h3>
+                <table class="table table-bordered" id="table-product">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 120px;"></th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+           </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                 <h3 style="text-align: center; padding: 10px;">Orders Table</h3>
+                 <table class="table table-bordered" id="table-order">
+                     <thead class="table-light">
+                         <tr>
+                             <th>Order date</th>
+                             <th>Customer Id</th>
+                             <th>Product Id</th>
+                             <th>Quanity</th>
+                             <th>Status</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+ 
+                     </tbody>
+                 </table>
+            </div>
+         </div>
+         
+    </div>
+    <footer class="foot">
+        <p>&copy; 2022 Designed By MD. MAHIDUL MOLLA - 1268459</p>
+    </footer>
+</body>
+</html>
